@@ -79,19 +79,23 @@ private:
 };
 void mainMenu()
 {
+	std::cout << "==========================" << std::endl;
 	std::cout << "1. Generate New Wallet" << std::endl;
 	std::cout << "2. Import Wallet" << std::endl;
 	std::cout << "3. display" << std::endl;
 	std::cout << "6. Exit" << std::endl;
+	std::cout << "==========================" << std::endl;
 }
 
 void displayMenu()
 {
+	std::cout << "==========================" << std::endl;
 	std::cout << "1. Private Key" << std::endl;
 	std::cout << "2. Mnemonic" << std::endl;
 	std::cout << "3. Child Private Key" << std::endl;
 	std::cout << "4. Payment Address" << std::endl;
 	std::cout << "5. Exit" << std::endl;
+	std::cout << "==========================" << std::endl;
 }
 
 HD_Wallet randomGen()
