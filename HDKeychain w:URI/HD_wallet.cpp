@@ -101,11 +101,16 @@ public:
 		newURI.set_address(childAddress(index));
 		return newURI;
 	}
+	data_chunk qrChunk(wallet::bitcoin_uri uri)
+	{
+		return wallet::qr.encode(uri);
+	}
 
 private:
 	//members
 	data_chunk entropy;
 	data_chunk seed;
+	data_chunk qrCode;
 	wallet::word_list mnemonic;
 	wallet::hd_private privateKey;
 	wallet::hd_public publicKey;

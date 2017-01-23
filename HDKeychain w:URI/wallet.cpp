@@ -122,6 +122,7 @@ int main(){
 			std::cout << "Enter index to recieve payment: ";
 			int index = getInput();
 			wallet.displayURI(Amount, index);
+			std::cout << base16_encode(wallet.qrChunk(wallet.displayURI(Amount, index))) << std::endl;
 
 
 		}else if (choice == 5)
