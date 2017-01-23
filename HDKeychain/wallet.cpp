@@ -1,7 +1,6 @@
 #include <bitcoin/bitcoin.hpp>
 #include <string.h>
 #include <iostream>
-#include <sstream>
 #include "HD_Wallet.cpp"
 
 using namespace bc;
@@ -107,8 +106,19 @@ int main(){
 				}else if (choice == 6)
 				{
 					wallet.dumpKeys();
+				}else if (choice == 7)
+				{
+					std::cout << "Bye" << std::endl;
+				} else
+				{
+					std::cout << "Selection Invalid! " << std::endl;
 				}
 			}
+		} else if (choice == 4)
+		{
+			std::cout << "Goodbye" << std::endl;
+		}else {
+			std::cout << "Selection Invalid!" << std::endl;
 		}
 	}
 }
