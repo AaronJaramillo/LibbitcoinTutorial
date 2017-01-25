@@ -3,6 +3,9 @@
 #include <string.h>
 #include <iostream>
 #include <sstream>
+//#include <qrencode.h> 
+
+
 using namespace bc;
 
 class HD_Wallet
@@ -101,9 +104,10 @@ public:
 		newURI.set_address(childAddress(index));
 		return newURI;
 	}
-	data_chunk qrChunk(wallet::bitcoin_uri uri)
+	data_chunk qrChunk(std::string uri)
 	{
-		return wallet::qr.encode(uri);
+		data_chunk qrChunk = wallet::qr::encode(to_chunk(uri));
+		return qrChunk;
 	}
 
 private:

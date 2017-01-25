@@ -2,6 +2,8 @@
 #include <string.h>
 #include <iostream>
 #include "HD_Wallet.cpp"
+//#include <qrencode.h> 
+
 
 using namespace bc;
 
@@ -122,7 +124,7 @@ int main(){
 			std::cout << "Enter index to recieve payment: ";
 			int index = getInput();
 			wallet.displayURI(Amount, index);
-			std::cout << base16_encode(wallet.qrChunk(wallet.displayURI(Amount, index))) << std::endl;
+			std::cout << encode_base16(wallet.qrChunk(wallet.buildURI(Amount, index).encoded())) << std::endl;
 
 
 		}else if (choice == 5)
