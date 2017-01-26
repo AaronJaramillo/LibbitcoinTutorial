@@ -39,10 +39,10 @@ public:
     }
 };
 
-static std::string to_string(data_slice data)
-{
-    return std::string(data.begin(), data.end());
-}
+// static std::string to_string(data_slice data)
+// {
+//     return std::string(data.begin(), data.end());
+// }
 
 int main()
 {
@@ -50,8 +50,35 @@ int main()
 	client::connection_type connection = {};
 	connection.retries = 10;
 	connection.timeout_seconds = 15;
-	connection.server = config::endpoint("tcp://obelisk.airbitz.co:9091");
+	connection.server = config::endpoint("tcp://libbitcoin1.thecodefactory.org:9091");
 
+
+
+	static const uint32_t timeout_ms = 1000000;
+	static const uint32_t retries = 3;
+
+	const auto on_reply = [](size_t blockHeight) 
+	{
+		std::cout << "height: " << blockHeight << std::endl;
+		// data_chunk data(8);		
+		// auto source = make_safe_deserializer(data.begin(), data.end());
+		// auto sink = make_unsafe_serializer(data.begin());
+		// sink.write_size_big_endian(blockHeight);
+		// const auto height = source.read_string();
+		// std::cout << height << std::endl;
+	};
+
+	static const auto on_error = [](const code& ec) {
+
+		std::cout << "Error Code: " << ec.message() << std::endl;
+
+	};
+	static const auto on_unknown = [](const std::string& message) {
+		std::cout << message << std::endl;
+	};
+
+
+	stream_fixture capture;
 	client::obelisk_client client(connection);
 
 	if(!client.connect(connection))
@@ -60,30 +87,16 @@ int main()
 	} else {
 		std::cout << "Connection Succeeded" << std::endl;
 
+
 	}
-	static const uint32_t timeout_ms = 2000;
-	static const uint32_t retries = 0;
-	static const auto on_error = [](const code&) {
-
-		std::cout << "Error Code" << std::endl;
-	};
-	static const auto on_unknown = [](const std::string& message) {
-		std::cout << message << std::endl;
-	};
-
-	const auto on_reply = [](size_t blockHeight) 
-	{
-		data_chunk data(8);
-		auto source = make_safe_deserializer(data.begin(), data.end());
-		auto sink = make_unsafe_serializer(data.begin());
-		sink.write_size_big_endian(blockHeight);
-		const auto height = source.read_string();
-		std::cout << height << std::endl;
-	};
-	stream_fixture capture;
-	client::proxy proxy(capture, on_unknown, timeout_ms, retries);
-	proxy.blockchain_fetch_last_height(on_error, on_reply);
+	//client.connect(connection);
+	client.blockchain_fetch_last_height(on_error, on_reply);
+	client.wait();
+	//client::proxy proxy(capture, on_unknown, timeout_ms, retries);
 	
+	//proxy.wait()
+	//const auto height = source.read_string();
+	//std::cout << height << std::endl;
 	// client.wait();
 	//std::cout << to_string(capture.out[0]) << std::endl;
 
