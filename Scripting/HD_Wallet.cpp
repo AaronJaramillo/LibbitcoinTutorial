@@ -56,13 +56,13 @@ public:
 	{
 		if(wallet::validate_mnemonic(mnemonic))
 		{
-			//return join(mnemonic);
-			std::string mnemonicString = join(mnemonic);
-			std::cout << "\n" << mnemonicString << std::endl;
+			return join(mnemonic);
+			// std::string mnemonicString = join(mnemonic);
+			// std::cout << "\n" << mnemonicString << std::endl;
 			// for (auto i = mnemonic.begin(); i != mnemonic.end(); ++i)
 	  //   		std::cout << *i << ' ';
 		}else{
-			std::cout << "mnemonic invalid!" std::endl;
+			return "mnemonic invalid!";
 		}
 	}
 

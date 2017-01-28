@@ -13,6 +13,16 @@ class HD_Wallet
 public:
 
 	//constructor
+	HD_Wallet()
+	{
+		entropy = data_chunk(16);
+		pseudo_random_fill(entropyChunk);
+		mnemonic = wallet::create_mnemonic(entropy);
+		seed = to_chunk(wallet::decode_mnemonic(mnemonic));
+		privateKey = wallet::hd_private(seed);
+		publicKey = privateKey.to_public();
+	}
+
 	HD_Wallet(const data_chunk Userentropy)
 	{
 		entropy = Userentropy;
