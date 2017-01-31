@@ -33,10 +33,10 @@ int main()
 
 	std::cout << "Redeeem Script: \n" << std::endl;
 	std::cout << multisigScript.to_string(0) << "\n" << std::endl;
-
-
-	short_hash scriptHash = ripemd160_hash(multisigScript.to_data(0));
 	std::cout << encode_base16(multisigScript.to_data(0)) << "\n" <<std::endl;
+
+	short_hash scriptHash = bitcoin_short_hash(multisigScript.to_data(0));
+
 	multisigScript = script(multisigScript.to_pay_script_hash_pattern(scriptHash));
 
 
