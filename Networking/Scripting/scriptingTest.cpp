@@ -15,17 +15,12 @@ int main()
 	HD_Wallet wallet2 = HD_Wallet();
 	HD_Wallet wallet3 = HD_Wallet();
 
-	data_chunk pubkey1 = to_chunk(wallet1.childPublicKey(1).to_hd_key());
-	data_chunk pubkey2 = to_chunk(wallet2.childPublicKey(1).to_hd_key());
-	data_chunk pubkey3 = to_chunk(wallet3.childPublicKey(1).to_hd_key());
+	data_chunk pubkey1 = to_chunk(wallet1.childPublicKey(1).point());
+	data_chunk pubkey2 = to_chunk(wallet2.childPublicKey(1).point());
+	data_chunk pubkey3 = to_chunk(wallet3.childPublicKey(1).point());
 
-	// data_chunk m;
-	// decode_base16(m, "52");
-	// data_chunk n;
-	// decode_base16(n, "53");
-	// data_chunk rawScript = build_chunk({m, pubkey1, pubkey2, pubkey3, n, multisigOP.to_data()});
-	//script multisigScript(rawScript, false);
-	//operation multisigOP;
+
+
 	operation::list opList {operation(opcode(82)), operation(opcode(33)), operation(pubkey1), operation(opcode(33)), operation(pubkey2), operation(opcode(33)), operation(pubkey3), operation(opcode(83)), operation(opcode(175))};
 	script multisigScript(opList);
 
@@ -38,25 +33,6 @@ int main()
 
 	std::cout << "Redeeem Script: \n" << std::endl;
 	std::cout << multisigScript.to_string(0) << "\n" << std::endl;
-
-	// input multisigInput; 
-	// multisigInput.set_sequence(42);
-	// output_point previousOutput;
-	// previousOutput.validation.cache.set_script(std::move(multisigScript));
-	// multisigInput.set_previous_output(previousOutput);
-
-
-	// transaction tx;
-	// tx.set_inputs({ std::move(multisigInput) });
-
-	// if(tx.is_valid()){
-	// 	std::cout << "Transaction is Valid: \n" << std::endl;
-	// } else {
-	// 	std::cout << "Invalid: \n" << std::endl;
-	// }
-
-
-	// std::cout << encode_base16(tx.hash()) << "\n" << std::endl;
 
 
 	short_hash scriptHash = ripemd160_hash(multisigScript.to_data(0));
