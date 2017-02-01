@@ -16,7 +16,7 @@ public:
 		pseudo_random_fill(entropy);
 		mnemonic = wallet::create_mnemonic(entropy);
 		seed = to_chunk(wallet::decode_mnemonic(mnemonic));
-		privateKey = wallet::hd_private(seed);
+		privateKey = wallet::hd_private(seed, wallet::hd_private::testnet);
 		publicKey = privateKey.to_public();
 	}
 
@@ -25,7 +25,7 @@ public:
 		entropy = Userentropy;
 		mnemonic = wallet::create_mnemonic(entropy);
 		seed = to_chunk(wallet::decode_mnemonic(mnemonic));
-		privateKey = wallet::hd_private(seed, testnet);
+		privateKey = wallet::hd_private(seed, wallet::hd_private::testnet);
 		publicKey = privateKey.to_public();
 	}
 
@@ -34,7 +34,7 @@ public:
 		seed = to_chunk(wallet::decode_mnemonic(mnemonicSeed));
 		//seed = to_chunk(hashSeed);
 		mnemonic = mnemonicSeed;
-		privateKey = wallet::hd_private(seed);
+		privateKey = wallet::hd_private(seed, wallet::hd_private::testnet);
 		publicKey = privateKey.to_public();
 	}
 
@@ -56,13 +56,13 @@ public:
 	{
 		if(wallet::validate_mnemonic(mnemonic))
 		{
-			//return join(mnemonic);
-			std::string mnemonicString = join(mnemonic);
-			std::cout << "\n" << mnemonicString << std::endl;
+			return join(mnemonic);
+			// std::string mnemonicString = join(mnemonic);
+			// std::cout << "\n" << mnemonicString << std::endl;
 			// for (auto i = mnemonic.begin(); i != mnemonic.end(); ++i)
 	  //   		std::cout << *i << ' ';
 		}else{
-			std::cout << "mnemonic invalid!" std::endl;
+			return "mnemonic invalid!";
 		}
 	}
 
@@ -97,7 +97,7 @@ public:
 
 	wallet::payment_address childAddress(int index)
 	{
-		return wallet::ec_public(childPublicKey(index).point()).to_payment_address();
+		return wallet::payment_address(wallet::ec_public(childPublicKey(index).point(), wallet::ec_private::testnet), 0x6f);
 	}
 
 private:

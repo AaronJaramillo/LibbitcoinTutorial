@@ -37,17 +37,17 @@ int main()
 
 	short_hash scriptHash = bitcoin_short_hash(multisigScript.to_data(0));
 
-	multisigScript = script(multisigScript.to_pay_script_hash_pattern(scriptHash));
+	script pay2ScriptHash = script(multisigScript.to_pay_script_hash_pattern(scriptHash));
 
 
 
 	std::cout << "Locking Script: " << std::endl;
-	std::cout << multisigScript.to_string(0) << "\n" << std::endl;
+	std::cout << pay2ScriptHash.to_string(0) << "\n" << std::endl;
 
 	payment_address multsigAddress(multisigScript);
 	std::cout << "Payment Address: " << std::endl;
-
 	std::cout << multsigAddress.encoded() << "\n" << std::endl;
+	std::cout << payment_address(scriptHash, 0x05).encoded() << std::endl;
 
 	std::cout << "Private Key Mnemonics: \n" << std::endl;
 	std::cout << "Key One: " << wallet1.displayMnemonic() << std::endl;
