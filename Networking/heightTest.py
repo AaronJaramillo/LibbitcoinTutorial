@@ -14,7 +14,7 @@ async def main():
     client_settings = libbitcoin.ClientSettings()
     client_settings.query_expire_time = None
 
-    client = context.Client("tcp://obelisk.airbitz.co:9091",
+    client = context.Client("tcp://obelisk-testnet.airbitz.co:9091",
                             settings=client_settings)
 
     ec, height = await client.last_height()
