@@ -13,40 +13,45 @@ std::string getInput2()
 	getline(cin, input);
 	return input;
 }
-
+//This is a testing class
+//use it to pass hardcoded strings
+//to the prompts by changing the string
+//declarations function and passing the preset
 std::string getInput(int preset)
 {
 	if(preset == 1)
 	{
-		return "";
+		
+		return ""; //Mnemonic
 	} else if (preset == 2)
 	{
-		return "2";
+		return "2"; //Index of child key
 	}else if (preset == 3)
 	{
-		return "";
+
+		return ""; //Destination Adress
 	}else if (preset == 4)
 	{
-		return "0.6697";
+		return "0.6697"; //Amount of Bitcoin to Spend
 	} else if (preset == 5)
 	{
-		return "";
+		return ""; //UTXO hash to spend
 
 	}else if (preset == 6)
 	{
-		return "0";
+		return "0"; //Output index of UTXO
 	}else{
 		return getInput2();
 	}
 }
 
-
+//Go here to get testnet coins https://testnet.manu.backend.hamburg/faucet
 int main() 
 {
 	std::cout << "Import Wallet Via Mnemonic: " << std::endl;
 	std::string Mnemonic1 = getInput2();
 	std::cout <<"\nChild Index To Spend From: " << std::endl;
-	int child = atoi(getInput(2).c_str());
+	int child = atoi(getInput2().c_str());
 	HD_Wallet wallet1(split(Mnemonic1));
 	data_chunk pubkey1 = to_chunk(wallet1.childPublicKey(child).point());
 
@@ -107,8 +112,9 @@ int main()
 	tx.inputs()[0].set_script(unlockingScript);
 	std::cout << "Raw Transaction: " << std::endl;
 	std::cout << encode_base16(tx.to_data()) << std::endl;
-
-
+	//Copy and paste the encoded transaction to this website 
+	//https://live.blockcypher.com/btc-testnet/pushtx/
+	//to broadcast it to the testnet blockchain.
 
 
 
