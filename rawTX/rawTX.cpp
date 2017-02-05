@@ -18,19 +18,19 @@ std::string getInput(int preset)
 {
 	if(preset == 1)
 	{
-		return "chase pair scorpion slab pause imitate dog blouse check dignity message strong";
+		return "";
 	} else if (preset == 2)
 	{
-		return "1";
+		return "2";
 	}else if (preset == 3)
 	{
-		return "mnrnjVFimDFrNkszzMtecr4yrMKmEuMRbv";
+		return "";
 	}else if (preset == 4)
 	{
-		return "0.68";
+		return "0.6697";
 	} else if (preset == 5)
 	{
-		return "f18e9ff07f87228676073beff9e92eceb6f902b12f2889b4a5681cbd63075a11";
+		return "";
 
 	}else if (preset == 6)
 	{
@@ -44,20 +44,20 @@ std::string getInput(int preset)
 int main() 
 {
 	std::cout << "Import Wallet Via Mnemonic: " << std::endl;
-	std::string Mnemonic1 = getInput(1);//"chase pair scorpion slab pause imitate dog blouse check dignity message strong";
-	HD_Wallet wallet1(split(Mnemonic1));
+	std::string Mnemonic1 = getInput2();
 	std::cout <<"\nChild Index To Spend From: " << std::endl;
 	int child = atoi(getInput(2).c_str());
+	HD_Wallet wallet1(split(Mnemonic1));
 	data_chunk pubkey1 = to_chunk(wallet1.childPublicKey(child).point());
 
 	//Make Output//
 	std::cout << "\nEnter Destination Address: " << std::endl;
-	std::string Destination = getInput(3); //"mnrnjVFimDFrNkszzMtecr4yrMKmEuMRbv";
+	std::string Destination = getInput2(); 
 	payment_address destinationAddy(Destination);
 	script outputScript = script().to_pay_key_hash_pattern(destinationAddy.hash());
 
 	std::cout << "\nEnter Amount(BTC) To Send: " << std::endl;
-	std::string BTC = getInput(4);
+	std::string BTC = getInput2();
 	uint64_t Satoshis;
 	decode_base10(Satoshis, BTC, 8);
 	output output1(Satoshis, outputScript);
@@ -65,9 +65,9 @@ int main()
 
 	//Get UTXO
 	std::cout << "\nEnter UTXO Hash To Spend: " << std::endl;
-	std::string hashString = getInput(5); //"f18e9ff07f87228676073beff9e92eceb6f902b12f2889b4a5681cbd63075a11";
+	std::string hashString = getInput2(); 
 	std::cout << "\nEnter Output Index: " << std::endl;
-	std::string index = getInput(6);
+	std::string index = getInput2();
 	uint32_t index1 = atoi(index.c_str());
 	hash_digest utxoHash;  
 	decode_hash(utxoHash, hashString);
@@ -91,7 +91,7 @@ int main()
 
 	//Endorse TX
 	endorsement sig; 
-	if(lockingScript.create_endorsement(sig, wallet1.childPrivateKey(1).secret(), lockingScript, tx, 0u, all))
+	if(lockingScript.create_endorsement(sig, wallet1.childPrivateKey(child).secret(), lockingScript, tx, 0u, all))
 	{
 		std::cout << "Signature: " << std::endl;
 		std::cout << encode_base16(sig) << "\n" << std::endl; 

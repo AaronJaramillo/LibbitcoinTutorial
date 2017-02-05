@@ -110,7 +110,7 @@ script makeSigScript(endorsement sig, script redeem)
 }
 script makeSigScript2(endorsement endorsement1, endorsement endorsement2, data_chunk pubkey1, data_chunk pubkey2, data_chunk pubkey3)
 {
-	data_chunk opData = getRedeemScript(pubkey1, pubkey2, pubkey3).to_data(1);
+	data_chunk opData = getRedeemScript(pubkey1, pubkey2, pubkey3).to_data();
 	operation::list ops {operation(opcode(0)), operation(endorsement1), operation(endorsement2)}; //, operation(opcode(82)), operation(pubkey1), operation(pubkey2), operation(pubkey3), operation(opcode(83)), operation(opcode(175))};;
 	ops.push_back(operation(opData));
 
@@ -124,9 +124,9 @@ script makeSigScript2(endorsement endorsement1, endorsement endorsement2, data_c
 
 int main()
 {
-	std::string Mnemonic1 = "chase pair scorpion slab pause imitate dog blouse check dignity message strong";
-	std::string Mnemonic2 = "logic waste merit drama fatal pen type embody room ladder skin chicken";
-	std::string Mnemonic3 = "early total frog beauty shrimp urban waste detect journey dad draft myth";
+	std::string Mnemonic1 = "";
+	std::string Mnemonic2 = "";
+	std::string Mnemonic3 = "";
 
 	HD_Wallet wallet1(split(Mnemonic1));
 	HD_Wallet wallet2(split(Mnemonic2));

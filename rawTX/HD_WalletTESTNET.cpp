@@ -57,10 +57,7 @@ public:
 		if(wallet::validate_mnemonic(mnemonic))
 		{
 			return join(mnemonic);
-			// std::string mnemonicString = join(mnemonic);
-			// std::cout << "\n" << mnemonicString << std::endl;
-			// for (auto i = mnemonic.begin(); i != mnemonic.end(); ++i)
-	  //   		std::cout << *i << ' ';
+
 		}else{
 			return "mnemonic invalid!";
 		}
@@ -97,7 +94,7 @@ public:
 
 	wallet::payment_address childAddress(int index)
 	{
-		return wallet::payment_address(wallet::ec_public(childPublicKey(index).point(), wallet::ec_private::testnet), 0x6f);
+		return wallet::payment_address(wallet::ec_public(childPublicKey(index).point()), 0x6f);
 	}
 
 private:

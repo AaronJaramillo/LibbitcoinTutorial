@@ -11,9 +11,9 @@ using namespace bc::chain;
 
 int main()
 {
-	std::string Mnemonic1 = "chase pair scorpion slab pause imitate dog blouse check dignity message strong";
-	std::string Mnemonic2 = "logic waste merit drama fatal pen type embody room ladder skin chicken";
-	std::string Mnemonic3 = "early total frog beauty shrimp urban waste detect journey dad draft myth";
+	std::string Mnemonic1 = "";
+	std::string Mnemonic2 = "";
+	std::string Mnemonic3 = "";
 
 	HD_Wallet wallet1(split(Mnemonic1));
 	HD_Wallet wallet2(split(Mnemonic2));
@@ -55,32 +55,6 @@ int main()
 	std::cout << multsigAddress.encoded() << "\n" << std::endl;
 	std::cout << payment_address(scriptHash, 0xc4).encoded() << "\n" << std::endl;
 
-	// operation::list opl {operation(pubkey1)};
-	// script unlocking(opl);
-	// script outputLocking(pay2ScriptHash);
-	// data_chunk txHash;
-	// decode_base16(txHash, "3b2c02693ef047ad8b8898fbc09fc17391e3d101913b7ea1161034928e1c48ca");
-	// output_point UTXO = output_point();
-	// UTXO.factory_from_data(txHash);
-	// input txInput(UTXO, unlocking, 0xFFFFFFFF);
-	// output txOutput(800000000, outputLocking);
-	// transaction::ins inList {txInput};
-	// transaction::outs outList {txOutput};
-	// transaction tx(1, 0, inList, outList);
-	// if(tx.is_valid())
-	// {
-	// 	std::cout << "valid" << std::endl;
-	// } else {
-	// 	std::cout << "not" << std::endl;
-	// }
-
-	// transaction testTX = transaction();
-	// testTX.factory_from_data(txHash);
-	// std::cout << testTX.total_output_value() << std::endl;
-
-
-	// hash_digest sigHasg = script::generate_signature_hash(tx, 0, unlocking, all);
-	// std::cout << encode_base16(sigHasg) << std::endl;
 
 	//transaction old(txHash);
 	transaction tx = transaction();
@@ -132,28 +106,5 @@ int main()
 	std::cout << tx.total_output_value() << std::endl;
 	std::cout << tx.is_overspent() << std::endl;
 	std::cout << encode_base16(tx.to_data()) << std::endl;
-
-
-	//Input 
-	//previous output, index 
-
-	//Output
-	//Destination address + amount 
-
-
-	//operation::list opl2 {operation(sigHasg), operation(pubkey1)};
-	//script unlocking2(opl2);
-	//input txOutput;
-
-	//transaction finalTX(1, 0, )
-
-
-
-	// std::cout << "Private Key Mnemonics: \n" << std::endl;
-	// std::cout << "Key One: " << wallet1.displayMnemonic() << std::endl;
-	// std::cout << "Key Two: " << wallet2.displayMnemonic() << std::endl;
-	// std::cout << "Key Three: " << wallet3.displayMnemonic() << "\n" <<std::endl; 
-	//3C9SjwS39LrmsQtN9VwrP5rJkao4h5Tu4T
-
 
 }
