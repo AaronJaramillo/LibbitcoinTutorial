@@ -50,20 +50,20 @@ std::string getInput(int preset)
 int main() 
 {
 	std::cout << "Import Wallet Via Mnemonic: " << std::endl;
-	std::string Mnemonic1 = getInput2();
+	std::string Mnemonic1 = getInput(1);
 	std::cout <<"\nChild Index To Spend From: " << std::endl;
-	int child = atoi(getInput2().c_str());
+	int child = atoi(getInput(2).c_str());
 	HD_Wallet wallet1(split(Mnemonic1));
 	data_chunk pubkey1 = to_chunk(wallet1.childPublicKey(child).point());
 
 	//Make Output//
 	std::cout << "\nEnter Destination Address: " << std::endl;
-	std::string Destination = getInput2(); 
+	std::string Destination = getInput(3); 
 	payment_address destinationAddy(Destination);
 	script outputScript = script().to_pay_key_hash_pattern(destinationAddy.hash());
 
 	std::cout << "\nEnter Amount(BTC) To Send: " << std::endl;
-	std::string BTC = getInput2();
+	std::string BTC = getInput(4);
 	uint64_t Satoshis;
 	decode_base10(Satoshis, BTC, 8);
 	output output1(Satoshis, outputScript);
@@ -71,9 +71,9 @@ int main()
 
 	//Get UTXO
 	std::cout << "\nEnter UTXO Hash To Spend: " << std::endl;
-	std::string hashString = getInput2(); 
+	std::string hashString = getInput(5); 
 	std::cout << "\nEnter Output Index: " << std::endl;
-	std::string index = getInput2();
+	std::string index = getInput(6);
 	uint32_t index1 = atoi(index.c_str());
 	hash_digest utxoHash;  
 	decode_hash(utxoHash, hashString);
@@ -108,6 +108,7 @@ int main()
 	sigScript.push_back(operation(sig));
 	sigScript.push_back(operation(pubkey1));
 	script unlockingScript(sigScript);
+	std::cout << unlockingScript.to_string(0) << "\n" << std:: endl;
 
 	//Make Signed TX
 	tx.inputs()[0].set_script(unlockingScript);
