@@ -10,6 +10,7 @@ using namespace bc::chain;
 std::string getInput2()
 {
 	std::string input; 
+	//cin.ignore();
 	getline(cin, input);
 	return input;
 }
@@ -22,20 +23,20 @@ std::string getInput(int preset)
 	if(preset == 1)
 	{
 		
-		return ""; //Mnemonic
+		return "dawn oxygen federal clap endorse aim round receive drill clown option album"; //Mnemonic
 	} else if (preset == 2)
 	{
 		return "2"; //Index of child key
 	}else if (preset == 3)
 	{
 
-		return ""; //Destination Adress
+		return "n2ge1S4bLDvJKx8AGXrK5JHY2D5cReVytu"; //Destination Adress
 	}else if (preset == 4)
 	{
-		return "0.6697"; //Amount of Bitcoin to Spend
+		return "0.6693"; //Amount of Bitcoin to Spend
 	} else if (preset == 5)
 	{
-		return ""; //UTXO hash to spend
+		return "193adb189da26fb9062b9a4823e2fe1ae4abe2264a7fd69ef50a1b954a18a488"; //UTXO hash to spend
 
 	}else if (preset == 6)
 	{

@@ -52,14 +52,14 @@ public:
 		std::cout << "\nPrivate Key:" << privateKey.encoded() << std::endl;
 	}
 
-	std::string displayMnemonic()
+	void displayMnemonic()
 	{
 		if(wallet::validate_mnemonic(mnemonic))
 		{
-			return join(mnemonic);
+			std::cout << "\n" << join(mnemonic) << std::endl;
 
 		}else{
-			return "mnemonic invalid!";
+			std::cout << "\n" << "Mnemonic Invalid! " << std::endl;
 		}
 	}
 
