@@ -21,9 +21,13 @@ int main()
 
 
 
-	operation::list opList {operation(opcode(82)), operation(opcode(33)), operation(pubkey1), operation(opcode(33)), operation(pubkey2), operation(opcode(33)), operation(pubkey3), operation(opcode(83)), operation(opcode(175))};
+	operation::list opList {operation(opcode(82)), operation(pubkey1), operation(pubkey2), operation(pubkey3), operation(opcode(83)), operation(opcode(175))};
 	script multisigScript(opList);
-
+	if(script().is_pay_multisig_pattern(opList))
+	{
+		std::cout << "Is Multisig Pattern!" << std::endl;
+	}
+	
 	if(multisigScript.is_valid())
 	{
 		std::cout << "Script is Valid!\n" << std::endl;
