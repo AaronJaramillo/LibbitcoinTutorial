@@ -23,20 +23,20 @@ std::string getInput(int preset)
 	if(preset == 1)
 	{
 		
-		return "dawn oxygen federal clap endorse aim round receive drill clown option album"; //Mnemonic
+		return ""; //Mnemonic
 	} else if (preset == 2)
 	{
-		return "2"; //Index of child key
+		return "1"; //Index of child key
 	}else if (preset == 3)
 	{
 
-		return "n2ge1S4bLDvJKx8AGXrK5JHY2D5cReVytu"; //Destination Adress
+		return ""; //Destination Adress
 	}else if (preset == 4)
 	{
-		return "0.6693"; //Amount of Bitcoin to Spend
+		return "1.482947"; //Amount of Bitcoin to Spend
 	} else if (preset == 5)
 	{
-		return "193adb189da26fb9062b9a4823e2fe1ae4abe2264a7fd69ef50a1b954a18a488"; //UTXO hash to spend
+		return ""; //UTXO hash to spend
 
 	}else if (preset == 6)
 	{
@@ -60,7 +60,7 @@ int main()
 	std::cout << "\nEnter Destination Address: " << std::endl;
 	std::string Destination = getInput(3); 
 	payment_address destinationAddy(Destination);
-	script outputScript = script().to_pay_key_hash_pattern(destinationAddy.hash());
+	script outputScript = script().to_pay_script_hash_pattern(destinationAddy.hash());
 
 	std::cout << "\nEnter Amount(BTC) To Send: " << std::endl;
 	std::string BTC = getInput(4);
@@ -88,7 +88,7 @@ int main()
 	input1.set_sequence(0xffffffff);
 
 	std::cout << "\nPrevious Locking Script: " << std::endl;
-	std::cout << lockingScript.to_string(0) << "\n" << std::endl;
+	std::cout << lockingScript.to_string(0xffffffff) << "\n" << std::endl;
 
 	//build TX
 	transaction tx = transaction();
@@ -108,7 +108,7 @@ int main()
 	sigScript.push_back(operation(sig));
 	sigScript.push_back(operation(pubkey1));
 	script unlockingScript(sigScript);
-	std::cout << unlockingScript.to_string(0) << "\n" << std:: endl;
+	std::cout << unlockingScript.to_string(0xffffffff) << "\n" << std:: endl;
 
 	//Make Signed TX
 	tx.inputs()[0].set_script(unlockingScript);
