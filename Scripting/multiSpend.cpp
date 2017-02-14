@@ -102,6 +102,7 @@ script buildSigScript(endorsement endorsed1, endorsement endorsed2, data_chunk p
 	if(script().is_sign_multisig_pattern(ops))
 	{
 		std::cout<< "Sign Multisig pattern: " << std::endl;
+
 		return script(ops);
 	}else{
 		std::cout << "Not sign Multisig pattern: " << std::endl;
@@ -109,7 +110,6 @@ script buildSigScript(endorsement endorsed1, endorsement endorsed2, data_chunk p
 	}
 }
 //Display
-
 
 int main()
 {

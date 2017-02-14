@@ -23,26 +23,27 @@ std::string getInput(int preset)
 	if(preset == 1)
 	{
 		
-		return ""; //Mnemonic
+		return "[ YOUR MNEMONIC SEED ]"; //Mnemonic
 	} else if (preset == 2)
 	{
 		return "1"; //Index of child key
 	}else if (preset == 3)
 	{
 
-		return ""; //Destination Adress
+		return "n2ge1S4bLDvJKx8AGXrK5JHY2D5cReVytu"; //Destination Adress
 	}else if (preset == 4)
 	{
-		return "1.482947"; //Amount of Bitcoin to Spend
+		return "1.48192700"; //Amount of Bitcoin to Spend
 	} else if (preset == 5)
 	{
-		return ""; //UTXO hash to spend
+		return "ce7f741625dfa86a50a1f18e3664e927441e27ef2f1c526e3aff8ea6c7a650fd"; //UTXO hash to spend
 
 	}else if (preset == 6)
 	{
 		return "0"; //Output index of UTXO
-	}else{
-		return getInput2();
+	}else if (preset == 7) 
+	{
+		return "HelloWorld";
 	}
 }
 
@@ -60,7 +61,7 @@ int main()
 	std::cout << "\nEnter Destination Address: " << std::endl;
 	std::string Destination = getInput(3); 
 	payment_address destinationAddy(Destination);
-	script outputScript = script().to_pay_script_hash_pattern(destinationAddy.hash());
+	script outputScript = script().to_pay_key_hash_pattern(destinationAddy.hash());
 
 	std::cout << "\nEnter Amount(BTC) To Send: " << std::endl;
 	std::string BTC = getInput(4);
@@ -87,6 +88,21 @@ int main()
 	input1.set_previous_output(utxo);
 	input1.set_sequence(0xffffffff);
 
+	data_chunk chunkMessage;
+	decode_base16(chunkMessage, getInput(7));
+	std::string messageString = getInput(7);
+	data_chunk data(80);
+	auto source = make_safe_deserializer(data.begin(), data.end());
+	auto sink = make_unsafe_serializer(data.begin());
+	sink.write_string(messageString);
+
+	const auto nullData = source.read_bytes(80);
+	std::cout << "Message: " << std::endl;
+	std::cout << encode_base16(nullData) << std::endl;
+	output output2 = output();
+	output2.set_script(script(script().to_null_data_pattern(nullData)));
+	output2.set_value(0);
+
 	std::cout << "\nPrevious Locking Script: " << std::endl;
 	std::cout << lockingScript.to_string(0xffffffff) << "\n" << std::endl;
 
@@ -94,6 +110,7 @@ int main()
 	transaction tx = transaction();
 	tx.inputs().push_back(input1);
 	tx.outputs().push_back(output1);
+	tx.outputs().push_back(output2);
 
 	//Endorse TX
 	endorsement sig; 
@@ -102,10 +119,17 @@ int main()
 		std::cout << "Signature: " << std::endl;
 		std::cout << encode_base16(sig) << "\n" << std::endl; 
 	}
+	// endorsement sig2; 
+	// if(lockingScript.create_endorsement(sig2, wallet1.childPrivateKey(child).secret(), lockingScript, tx, 1u, all))
+	// {
+	// 	std::cout << "Signature: " << std::endl;
+	// 	std::cout << encode_base16(sig2) << "\n" << std::endl; 
+	// }
 
 	//make Sig Script
 	operation::list sigScript; 
 	sigScript.push_back(operation(sig));
+
 	sigScript.push_back(operation(pubkey1));
 	script unlockingScript(sigScript);
 	std::cout << unlockingScript.to_string(0xffffffff) << "\n" << std:: endl;
