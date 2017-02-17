@@ -8,7 +8,7 @@ using namespace bc;
 class HD_Wallet
 {
 public:
-
+	
 	//constructor
 	HD_Wallet()
 	{
