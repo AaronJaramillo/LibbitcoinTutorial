@@ -45,6 +45,12 @@ public:
 
 	// }
 	//Payment Channel (Multisig Addy)
+	script getChannelRedeemScript()
+	{
+		data_stack keys {recieverKey, payerKey};
+		script multiSig = script(script().to_pay_multisig_pattern(2, keys));
+		return multiSig;
+	}
 	payment_address payment_Channel()
 	{
 		data_stack keys {recieverKey, payerKey};
@@ -58,6 +64,7 @@ public:
 	{
 		return script(script().to_pay_key_hash_pattern(addy.hash()));
 	}
+
 	script outputP2SHScript(short_hash scriptHash)
 	{
 		return script(script().to_pay_script_hash_pattern(scriptHash));
@@ -87,7 +94,7 @@ public:
 	transaction refund()
 	{
 		output_point utxo(FillUpFinal.hash(), 0);
-		input input1 = input()
+		input input1 = input();
 		input1.set_previous_output(utxo);
 		input1.set_sequence(0);
 		//needs script//
@@ -96,7 +103,7 @@ public:
 		output1.set_value(channelValue);
 		transaction refund = transaction();
 		refund.inputs().push_back(input1);
-		refund.outputs().push_back(output);
+		refund.outputs().push_back(output1);
 		return refund;
 
 	}

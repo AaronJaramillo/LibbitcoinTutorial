@@ -33,6 +33,10 @@ public:
 		payChannel = Channel(recieverKey, payerKey, amount, holdingPeriod);
 		return payChannel;
 	}
+	Channel getChannel()
+	{
+		return payChannel;
+	}
 
 	void makefillUp()
 	{
@@ -60,13 +64,17 @@ public:
 		endorsement signature;
 		if(script().create_endorsement(signature, wallet.childPrivateKey(1).secret(), prevlockingScript, fillUp, 0, all))
 		{
-			std::cout << "Sig: " << encode_base16(signature) << std::endl;
+			//std::cout << "Sig: " << encode_base16(signature) << std::endl;
 			return signature;
 		} else {
 			return signature;
 		}
 	}
-	void getRefundSig()
+	// void getRefundSig()
+	// {
+
+
+	// }
 
 private:
 	HD_Wallet wallet;

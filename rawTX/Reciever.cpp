@@ -21,7 +21,7 @@ public:
 	}
 
 	//create refund
-	setPaychannel(Channel channel)
+	void setPayChannel(Channel channel)
 	{
 		payChannel = channel;
 	}
@@ -31,6 +31,11 @@ public:
 		endorsement refundSig;
 		script().create_endorsement(refundSig, wallet.childPrivateKey(1).secret(), redeemScript, refund, 0, all);
 		return refundSig;
+	}
+
+	void getRefund()
+	{
+		refund = payChannel.refund();
 	}
 
 
@@ -45,6 +50,7 @@ public:
 
 private:
 	HD_Wallet wallet;
+	script redeemScript;
 	data_chunk payerKey;
 	data_chunk recieverKey;
 	transaction refund;
@@ -53,4 +59,4 @@ private:
 
 
 
-}
+};

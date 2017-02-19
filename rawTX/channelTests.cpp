@@ -1,6 +1,7 @@
 #include <bitcoin/bitcoin.hpp>
 #include "microPaymentChannel.cpp"
 #include "Payer.cpp"
+#include "Reciever.cpp"
 //#include "HD_walletTESTNET.cpp"
 #include <string.h>
 
@@ -35,6 +36,14 @@ bool test_channel_fill_up(Payer channelPayer)
 	} else {
 		return 0;
 	}
+}
+bool test_sign_refund(Reciever channelReciever)
+{
+	channelReciever.getRefund();
+	endorsement refundSig1 = channelReciever.signRefund();
+	std::cout << encode_base16(refundSig1) << std::endl;
+	return 1;
+
 }
 // bool test_valid_bond(Channel paymentChannel, HD_Wallet wallet)
 // {
@@ -78,11 +87,17 @@ int main()
 	test_runner(test_payment_channel(paymentChannel));
 
 	Payer channelPayer("chase pair scorpion slab pause imitate dog blouse check dignity message strong");
+	Reciever channelReciever("logic waste merit drama fatal pen type embody room ladder skin chicken");
+	
 
 	test_runner(test_channel_fill_up(channelPayer));
 	//paymentChannel.channelFillUp("599cc7320426d23908713e58040984a98f83b7c18759765695f938792835ded6", 0);
 
 
-
+	channelPayer.requestChannel(148192700, 20);
+	channelPayer.makefillUp();
+	transaction tx = channelPayer.getfillUp();
+	channelReciever.setPayChannel(channelPayer.getChannel());
+	test_runner(test_sign_refund(channelReciever));
 	return 0; 
 }
