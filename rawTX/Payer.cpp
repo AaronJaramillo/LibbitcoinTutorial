@@ -19,19 +19,25 @@ public:
 		wallet = HD_Wallet(split(mnemonic));
 		payerKey = to_chunk(wallet.childPublicKey(1).point());
 	}
-
-	data_chunk getRecieverKey()
-	{
-		data_chunk pk;
-		pk = to_chunk(HD_Wallet(split("logic waste merit drama fatal pen type embody room ladder skin chicken")).childPublicKey(1).point());
-		return pk;
-	}
+	// void setReciever(data_chunk payee)
+	// {
+	// 	recieverKey = payee;
+	// }
+	// data_chunk getRecieverKey()
+	// {
+		
+	// 	return recieverKey;
+	// }
 
 	Channel requestChannel(uint64_t amount, uint32_t holdingPeriod)
 	{
-		recieverKey = getRecieverKey();
-		payChannel = Channel(recieverKey, payerKey, amount, holdingPeriod);
+		//recieverKey = getRecieverKey();
+		payChannel = Channel(payerKey, amount, holdingPeriod);
 		return payChannel;
+	}
+	void confirmChannel(Channel completeChannel)
+	{
+		payChannel = completeChannel;
 	}
 	Channel getChannel()
 	{
@@ -70,6 +76,10 @@ public:
 			return signature;
 		}
 	}
+	void setRefundSig(endorsement sig)
+	{
+		refundSig = sig;
+	}
 	// void getRefundSig()
 	// {
 
@@ -84,6 +94,7 @@ private:
 	transaction Bond; 
 	Channel payChannel;
 	endorsement refundSig;
+
 
 
 };

@@ -17,13 +17,17 @@ public:
 	{
 
 	}
-	Channel(data_chunk p1, data_chunk p2, uint64_t amount, uint32_t holdingPeriod)
+	Channel(data_chunk payer, uint64_t amount, uint32_t holdingPeriod)
 	{
-		recieverKey = p1;
-		payerKey = p2; 
+		payerKey = payer; 
 		channelValue = amount;
 		locktime = holdingPeriod;
 		paymentChannel = payment_Channel();	
+	}
+
+	void set_recieverKey(data_chunk reciever)
+	{
+		recieverKey = reciever;
 	}
 	// //Wallet1 
 	// //
@@ -91,23 +95,31 @@ public:
 		return FillUp;
 	}
 
-	transaction refund()
+	transaction setRefund()
 	{
-		output_point utxo(FillUpFinal.hash(), 0);
+		refundBond = transaction();	
+		output_point utxo(fillHash, 0);
 		input input1 = input();
 		input1.set_previous_output(utxo);
 		input1.set_sequence(0);
+		refundBond.inputs().push_back(input1);
 		//needs script//
 		output output1 = output();
-		output1.set_script(outputP2KHScript(bitcoin_short_hash(payerKey)));
-		output1.set_value(channelValue);
-		transaction refund = transaction();
-		refund.inputs().push_back(input1);
-		refund.outputs().push_back(output1);
-		return refund;
+		output1.set_script(outputP2KHScript(payment_address(ec_public(payerKey), 0x6f)));
+		output1.set_value((channelValue - 1000));
+		refundBond.outputs().push_back(output1);
+
+		
+
+		refundBond.set_locktime(1487552300);
+		
+		return refundBond;
 
 	}
-
+	transaction getRefund()
+	{
+		return refundBond;
+	}
 	transaction getFillUp()
 	{
 		return FillUp;
@@ -119,6 +131,11 @@ public:
 	void set_fillUpFinal(transaction tx)
 	{
 		FillUpFinal = tx;
+	}
+
+	void setFillHash(hash_digest hash)
+	{
+		fillHash = hash;
 	}
 
 
@@ -149,6 +166,7 @@ private:
 	endorsement bondSig;
 	transaction FillUp;
 	transaction FillUpFinal;
+	hash_digest fillHash;
 	transaction Bond;
 	transaction refundBond;
 	transaction channelState;

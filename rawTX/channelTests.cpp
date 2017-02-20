@@ -76,28 +76,37 @@ void test_runner(bool code)
 
 int main()
 {
-	HD_Wallet wallet1 = HD_Wallet(split("chase pair scorpion slab pause imitate dog blouse check dignity message strong"));
-	HD_Wallet wallet2 = HD_Wallet(split("logic waste merit drama fatal pen type embody room ladder skin chicken"));
+	// HD_Wallet wallet1 = HD_Wallet(split("chase pair scorpion slab pause imitate dog blouse check dignity message strong"));
+	// HD_Wallet wallet2 = HD_Wallet(split("logic waste merit drama fatal pen type embody room ladder skin chicken"));
 
 
-	data_chunk p1 = to_chunk(wallet1.childPublicKey(1).point());
-	data_chunk p2 = to_chunk(wallet2.childPublicKey(1).point());
-	Channel paymentChannel(p2, p1, 100000000, 6);
+	// data_chunk p1 = to_chunk(wallet1.childPublicKey(1).point());
+	// data_chunk p2 = to_chunk(wallet2.childPublicKey(1).point());
+	//Channel paymentChannel(p2, p1, 100000000, 6);
 
-	test_runner(test_payment_channel(paymentChannel));
+	//test_runner(test_payment_channel(paymentChannel));
 
 	Payer channelPayer("chase pair scorpion slab pause imitate dog blouse check dignity message strong");
 	Reciever channelReciever("logic waste merit drama fatal pen type embody room ladder skin chicken");
 	
 
-	test_runner(test_channel_fill_up(channelPayer));
+	//test_runner(test_channel_fill_up(channelPayer));
 	//paymentChannel.channelFillUp("599cc7320426d23908713e58040984a98f83b7c18759765695f938792835ded6", 0);
 
 
-	channelPayer.requestChannel(148192700, 20);
+	//From here Down we have a constructed channel
+	Channel microPay = channelPayer.requestChannel(148192700, 20);
+	microPay = channelReciever.acceptPayChannel(microPay);
+	channelPayer.confirmChannel(microPay);
 	channelPayer.makefillUp();
-	transaction tx = channelPayer.getfillUp();
-	channelReciever.setPayChannel(channelPayer.getChannel());
-	test_runner(test_sign_refund(channelReciever));
+	hash_digest fillHash = channelPayer.getfillUp().hash();
+	//test_runner(test_sign_refund(channelReciever));
+	channelReciever.getChannel().setFillHash(fillHash);
+	channelReciever.setRefund();
+	endorsement refundSig1 = channelReciever.signRefund();
+	channelPayer.setRefundSig(refundSig1);
+	std::cout << microPay.payment_Channel().encoded() << std::endl;
+	//channelReciever.setRefund();
+	std::cout<< encode_base16(channelReciever.getRefund().to_data(1)) << std::endl;
 	return 0; 
 }

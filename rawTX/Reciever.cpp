@@ -21,9 +21,16 @@ public:
 	}
 
 	//create refund
-	void setPayChannel(Channel channel)
+	Channel acceptPayChannel(Channel channel)
 	{
 		payChannel = channel;
+		payChannel.set_recieverKey(recieverKey);
+		return payChannel;
+	}
+
+	Channel getChannel()
+	{
+		return payChannel;
 	}
 
 	endorsement signRefund()
@@ -33,11 +40,18 @@ public:
 		return refundSig;
 	}
 
-	void getRefund()
+	void setRefund()
 	{
-		refund = payChannel.refund();
+		refund = payChannel.setRefund();
 	}
-
+	transaction getRefund()
+	{
+		return refund;
+	}
+	data_chunk public_key()
+	{
+		return recieverKey;
+	}
 
 
 
