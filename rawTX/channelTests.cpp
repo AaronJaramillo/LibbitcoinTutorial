@@ -100,8 +100,10 @@ int main()
 	channelPayer.confirmChannel(microPay);
 	channelPayer.makefillUp();
 	hash_digest fillHash = channelPayer.getfillUp().hash();
+	//std::cout << encode_base16(fillHash) << std::endl;
 	//test_runner(test_sign_refund(channelReciever));
-	channelReciever.getChannel().setFillHash(fillHash);
+	channelReciever.set_fillHash(fillHash);
+	//std::cout << encode_base16(channelReciever.getChannel().getFillHash()) << std::endl;
 	channelReciever.setRefund();
 	endorsement refundSig1 = channelReciever.signRefund();
 	channelPayer.setRefundSig(refundSig1);

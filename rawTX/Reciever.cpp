@@ -33,6 +33,12 @@ public:
 		return payChannel;
 	}
 
+	void set_fillHash(hash_digest hash)
+	{
+		fillHash = hash;
+		payChannel.setFillHash(fillHash);
+	}
+
 	endorsement signRefund()
 	{
 		endorsement refundSig;
@@ -68,6 +74,7 @@ private:
 	data_chunk payerKey;
 	data_chunk recieverKey;
 	transaction refund;
+	hash_digest fillHash;
 	Channel payChannel;
 
 

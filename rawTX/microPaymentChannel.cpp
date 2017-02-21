@@ -21,7 +21,7 @@ public:
 	{
 		payerKey = payer; 
 		channelValue = amount;
-		locktime = holdingPeriod;
+		locktime = holdingPeriod; 
 		paymentChannel = payment_Channel();	
 	}
 
@@ -95,27 +95,7 @@ public:
 		return FillUp;
 	}
 
-	transaction setRefund()
-	{
-		refundBond = transaction();	
-		output_point utxo(fillHash, 0);
-		input input1 = input();
-		input1.set_previous_output(utxo);
-		input1.set_sequence(0);
-		refundBond.inputs().push_back(input1);
-		//needs script//
-		output output1 = output();
-		output1.set_script(outputP2KHScript(payment_address(ec_public(payerKey), 0x6f)));
-		output1.set_value((channelValue - 1000));
-		refundBond.outputs().push_back(output1);
 
-		
-
-		refundBond.set_locktime(1487552300);
-		
-		return refundBond;
-
-	}
 	transaction getRefund()
 	{
 		return refundBond;
@@ -136,8 +116,41 @@ public:
 	void setFillHash(hash_digest hash)
 	{
 		fillHash = hash;
+		
+	}
+	hash_digest getFillHash()
+	{
+		return fillHash;
 	}
 
+
+
+	transaction setRefund()
+	{
+		refundBond = transaction();	
+		hash_digest hash = getFillHash();
+
+		output_point utxo(hash, 0);
+		
+		input input1 = input();
+		input1.set_previous_output(utxo);
+		input1.set_sequence(0);
+
+		refundBond.inputs().push_back(input1);
+		//needs script//
+		output output1 = output();
+		output1.set_script(outputP2KHScript(payment_address(ec_public(payerKey), 0x6f)));
+		output1.set_value((channelValue - 1000));
+		refundBond.outputs().push_back(output1);
+
+		
+
+		refundBond.set_locktime(1487552300);
+
+		
+		return refundBond;
+
+	}
 
 	// transaction refund(payment_address payeeAddress, uint64_t channelValue)
 	// {
@@ -150,7 +163,18 @@ public:
 
 	// }
 	//micro tx for the payee 
-
+	uint64_t getchannelValue()
+	{
+		return channelValue;
+	}
+	void setCurrentValue(uint64_t value)
+	{
+		currentValue = value;
+	}
+	uint64_t getCurrentValue()
+	{
+		return currentValue;
+	}
 	//transaction stream
 
 private: 
@@ -170,7 +194,7 @@ private:
 	transaction Bond;
 	transaction refundBond;
 	transaction channelState;
-
+	uint64_t currentValue; //value sent so far
 	uint64_t channelValue; 
 	uint32_t locktime; 
 

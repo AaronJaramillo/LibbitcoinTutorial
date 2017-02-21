@@ -80,6 +80,47 @@ public:
 	{
 		refundSig = sig;
 	}
+
+	transaction setState(int extraAmount)
+	{
+		state = transaction();	
+		hash_digest hash = fillUp.hash(all);
+
+		output_point utxo(hash, 0);
+		
+		input input1 = input();
+		input1.set_previous_output(utxo);
+		input1.set_sequence(0);
+
+		state.inputs().push_back(input1);
+		//needs script//
+		output output1 = output();
+		output1.set_script(outputP2KHScript(payment_address(ec_public(recieverKey), 0x6f)));
+		output1.set_value((payChannel.getCurrentValue() + extraAmount));
+		state.outputs().push_back(output1);
+		output2.set_script(outputP2KHScript(payment_address(ec_public(payerKey), 0x6f)));
+		output2.set_value(payChannel.getChannelValue() - (payChannel.getCurrentValue() + extraAmount + 1000));
+		state.outputs().push_back(output2);
+
+		state.set_locktime(1487552300);
+		std::cout << encode_base16(state.to_data(1)) << std::endl;
+		
+		return state;
+
+	}
+
+	void payStream()
+	{
+		int x = 1;
+		while(x == 1)
+		{
+			setState(10000);
+			cin >> x;
+
+		}
+
+	}
+
 	// void getRefundSig()
 	// {
 
@@ -91,7 +132,8 @@ private:
 	data_chunk payerKey;
 	data_chunk recieverKey;
 	transaction fillUp; 
-	transaction Bond; 
+	transaction Bond;
+	transaction state; 
 	Channel payChannel;
 	endorsement refundSig;
 
