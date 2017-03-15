@@ -109,6 +109,7 @@ int main()
 	channelPayer.setRefundSig(refundSig1);
 	std::cout << microPay.payment_Channel().encoded() << std::endl;
 	//channelReciever.setRefund();
+	
 	std::cout<< encode_base16(channelReciever.getRefund().to_data(1)) << std::endl;
 	return 0; 
 }

@@ -1,13 +1,8 @@
-
-
-
-
 #include <bitcoin/bitcoin.hpp>
 #include <bitcoin/client.hpp>
 #include <string.h>
 #include <iostream>
 #include <cstdint>
-
 
 using namespace bc;
 using namespace bc::chain;
@@ -16,11 +11,11 @@ using namespace bc::config;
 
 int main()
 {
-// 	const auto& address = wallet::payment_address("17SEnU2rxxh8ugqh1Tpq6c9xHpQGvEjyLB");
+	const auto& address = wallet::payment_address("1KvN5B9Q3qwgZ3iVpPCS4pxtYpZrBKmkSG");
 	client::connection_type connection = {};
 	connection.retries = 3;
 	connection.timeout_seconds = 8;
-	connection.server = config::endpoint("tcp://obelisk-testnet.airbitz.co:9091");
+	connection.server = config::endpoint("tcp://mainnet.libbitcoin.net:9091");
 
 
 
@@ -29,7 +24,7 @@ int main()
 
 	const auto on_reply = [](size_t blockHeight) 
 	{
-		std::cout << "height: " << blockHeight << std::endl;
+		std::cout << "Height: " << blockHeight << std::endl;
 
 	};
 
@@ -53,9 +48,23 @@ int main()
 		std::cout << "Connection Succeeded" << std::endl;
 	}
 
+
+	static const auto on_done = [](const chain::history::list& rows){
+		std::cout<< encode_base10(rows[0].value, 8) <<std::endl;
+
+	};
+	static const auto on_error2 = [](const code& ec) {
+
+		std::cout << "Error Code: " << ec.message() << std::endl;
+
+	};
 	//client.connect(connection);
 	client.blockchain_fetch_last_height(on_error, on_reply);
 	client.wait();
+
+	client.blockchain_fetch_history2(on_error2, on_done, address);
+	client.wait();
+
 	//client::proxy proxy(capture, on_unknown, timeout_ms, retries);
 }
 // 	//proxy.wait()

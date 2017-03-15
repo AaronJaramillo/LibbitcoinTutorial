@@ -88,8 +88,8 @@ int main()
 	input1.set_previous_output(utxo);
 	input1.set_sequence(0xffffffff);
 
-	data_chunk chunkMessage;
-	decode_base16(chunkMessage, getInput(7));
+
+
 	std::string messageString = getInput(7);
 	data_chunk data(80);
 	auto source = make_safe_deserializer(data.begin(), data.end());
@@ -99,6 +99,8 @@ int main()
 	const auto nullData = source.read_bytes(80);
 	std::cout << "Message: " << std::endl;
 	std::cout << encode_base16(nullData) << std::endl;
+
+	
 	output output2 = output();
 	output2.set_script(script(script().to_null_data_pattern(nullData)));
 	output2.set_value(0);
@@ -141,12 +143,6 @@ int main()
 	//Copy and paste the encoded transaction to this website 
 	//https://live.blockcypher.com/btc-testnet/pushtx/
 	//to broadcast it to the testnet blockchain.
-
-
-
-
-
-
 
 
 

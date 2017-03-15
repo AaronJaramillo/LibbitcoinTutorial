@@ -163,7 +163,7 @@ public:
 
 	// }
 	//micro tx for the payee 
-	uint64_t getchannelValue()
+	uint64_t getChannelValue()
 	{
 		return channelValue;
 	}
