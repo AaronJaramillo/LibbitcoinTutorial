@@ -13,8 +13,8 @@ int main()
 	connection.timeout_seconds = 8;
 	connection.server = config::endpoint("tcp://mainnet.libbitcoin.net:9091");
 
-	static const uint32_t timeout_ms = 3000;
-	static const uint32_t retries = 3;
+	// static const uint32_t timeout_ms = 3000;
+	// static const uint32_t retries = 3;
 
 	const auto on_reply = [](size_t blockHeight) 
 	{
@@ -40,4 +40,5 @@ int main()
 
 	client.blockchain_fetch_last_height(on_error, on_reply);
 	client.wait();
+
 }
