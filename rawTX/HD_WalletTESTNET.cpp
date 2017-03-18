@@ -1,5 +1,6 @@
 
 #include <bitcoin/bitcoin.hpp>
+#include <bitcoin/client.hpp>
 #include <string.h>
 #include <iostream>
 #include <sstream>
@@ -79,6 +80,42 @@ public:
 			displayAddress(start);
 			start++;
 		}
+	}
+	void getBalance(int index)
+	{
+		
+		client::connection_type connection = {};
+		connection.retries = 3;
+		connection.timeout_seconds = 8;
+		connection.server = config::endpoint("tcp://testnet.libbitcoin.net:9091");
+
+		client::obelisk_client client(connection);
+
+
+		static const auto on_done = [](const chain::history::list rows)
+		{
+			
+			std::cout<< encode_base10(rows[0].value, 8) <<std::endl;
+
+		};
+		static const auto on_error2 = [](const code ec) {
+
+			std::cout << "Error Code: " << ec.message() << std::endl;
+
+		};
+
+
+		if(!client.connect(connection))
+		{
+			std::cout << "Fail" << std::endl;
+		} else {
+			std::cout << "Connection Succeeded" << std::endl;
+		}
+
+		client.blockchain_fetch_history2(on_error2, on_done, childAddress(index));
+		client.wait();
+
+
 	}
 
 	//accesor

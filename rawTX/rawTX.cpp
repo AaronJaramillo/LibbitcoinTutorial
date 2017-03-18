@@ -1,4 +1,5 @@
 #include <bitcoin/bitcoin.hpp>
+#include <bitcoin/client.hpp>
 #include "HD_walletTESTNET.cpp"
 #include <string.h>
 
@@ -23,20 +24,21 @@ std::string getInput(int preset)
 	if(preset == 1)
 	{
 		
-		return "[ YOUR MNEMONIC SEED ]"; //Mnemonic
+		return "chase pair scorpion slab pause imitate dog blouse check dignity message strong"; //Mnemonic
 	} else if (preset == 2)
 	{
 		return "1"; //Index of child key
 	}else if (preset == 3)
 	{
 
-		return "n2ge1S4bLDvJKx8AGXrK5JHY2D5cReVytu"; //Destination Adress
+		return "mnrnjVFimDFrNkszzMtecr4yrMKmEuMRbv"; //Destination Adress
+
 	}else if (preset == 4)
 	{
-		return "1.48192700"; //Amount of Bitcoin to Spend
+		return "1.48188700"; //Amount of Bitcoin to Spend
 	} else if (preset == 5)
 	{
-		return "ce7f741625dfa86a50a1f18e3664e927441e27ef2f1c526e3aff8ea6c7a650fd"; //UTXO hash to spend
+		return "599cc7320426d23908713e58040984a98f83b7c18759765695f938792835ded6"; //UTXO hash to spend
 
 	}else if (preset == 6)
 	{
@@ -144,7 +146,34 @@ int main()
 	//https://live.blockcypher.com/btc-testnet/pushtx/
 	//to broadcast it to the testnet blockchain.
 
+	client::connection_type connection = {};
+	connection.retries = 3;
+	connection.timeout_seconds = 8;
+	connection.server = config::endpoint("tcp://testnet.libbitcoin.net:19091");
 
+	client::obelisk_client client(connection);
+
+	if(!client.connect(connection))
+	{
+		std::cout << "Fail" << std::endl;
+	} else {
+		std::cout << "Connection Succeeded" << std::endl;
+	}
+	
+	static const auto on_done = [](const code& ec) {
+
+		std::cout << "Success: " << ec.message() << std::endl;
+
+	};
+
+	static const auto on_error2 = [](const code& ec) {
+
+		std::cout << "Error Code: " << ec.message() << std::endl;
+
+	};
+
+	client.transaction_pool_broadcast(on_error2, on_done, tx);
+	client.wait();
 
 
 
