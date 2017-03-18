@@ -24,7 +24,7 @@ std::string getInput(int preset)
 	if(preset == 1)
 	{
 		
-		return "chase pair scorpion slab pause imitate dog blouse check dignity message strong"; //Mnemonic
+		return ""; //Mnemonic
 	} else if (preset == 2)
 	{
 		return "1"; //Index of child key
