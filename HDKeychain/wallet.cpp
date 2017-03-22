@@ -1,7 +1,7 @@
 #include <bitcoin/bitcoin.hpp>
 #include <string.h>
 #include <iostream>
-#include "HD_Wallet.cpp"
+#include "HD_WalletTESTNET.cpp"
 
 using namespace bc;
 
@@ -24,7 +24,8 @@ void displayMenu()
 	std::cout << "4. Payment Address" << std::endl;
 	std::cout << "5. Address Range" << std::endl; 
 	std::cout << "6. Dump Keys" << std::endl;
-	std::cout << "7. Exit" << std::endl;
+	std::cout << "7. Check Child Balance" << std::endl;
+	std::cout << "8. Exit" << std::endl;
 	std::cout << "==========================" << std::endl;
 }
 
@@ -76,7 +77,7 @@ int main(){
 
 		} else if (choice == 3)
 		{	
-			while(choice != 7){
+			while(choice != 8){
 				displayMenu();
 				choice = getInput();
 				std::cin.ignore();
@@ -108,7 +109,11 @@ int main(){
 					wallet.dumpKeys();
 				}else if (choice == 7)
 				{
-					std::cout << "Bye" << std::endl;
+					index = getInput();
+					wallet.getBalance(index);
+				} else if (choice == 8)
+				{
+					std::cout << "Goodbye: " << std::endl;
 				} else
 				{
 					std::cout << "Selection Invalid! " << std::endl;

@@ -1,5 +1,6 @@
 
 #include <bitcoin/bitcoin.hpp>
+#include <bitcoin/client.hpp>
 #include <string.h>
 #include <iostream>
 #include <sstream>
@@ -25,7 +26,7 @@ public:
 		entropy = Userentropy;
 		mnemonic = wallet::create_mnemonic(entropy);
 		seed = to_chunk(wallet::decode_mnemonic(mnemonic));
-		privateKey = wallet::hd_private(seed, testnet);
+		privateKey = wallet::hd_private(seed, wallet::hd_private::testnet);
 		publicKey = privateKey.to_public();
 	}
 
@@ -34,7 +35,7 @@ public:
 		seed = to_chunk(wallet::decode_mnemonic(mnemonicSeed));
 		//seed = to_chunk(hashSeed);
 		mnemonic = mnemonicSeed;
-		privateKey = wallet::hd_private(seed);
+		privateKey = wallet::hd_private(seed, wallet::hd_private::testnet);
 		publicKey = privateKey.to_public();
 	}
 
@@ -52,7 +53,7 @@ public:
 		std::cout << "\nPrivate Key:" << privateKey.encoded() << std::endl;
 	}
 
-	std::string displayMnemonic()
+	void displayMnemonic()
 	{
 		if(wallet::validate_mnemonic(mnemonic))
 		{
@@ -62,7 +63,7 @@ public:
 			// for (auto i = mnemonic.begin(); i != mnemonic.end(); ++i)
 	  //   		std::cout << *i << ' ';
 		}else{
-			std::cout << "mnemonic invalid!" std::endl;
+			std::cout << "mnemonic invalid!" << std::endl;
 		}
 	}
 
@@ -84,6 +85,43 @@ public:
 		}
 	}
 
+	void getBalance(int index)
+	{
+		
+		client::connection_type connection = {};
+		connection.retries = 3;
+		connection.timeout_seconds = 8;
+		connection.server = config::endpoint("tcp://testnet.libbitcoin.net:19091");
+
+		client::obelisk_client client(connection);
+
+
+		static const auto on_done = [](const chain::history::list rows)
+		{
+			
+			std::cout<< encode_base10(rows[0].value, 8) <<std::endl;
+
+		};
+		static const auto on_error2 = [](const code ec) {
+
+			std::cout << "Error Code: " << ec.message() << std::endl;
+
+		};
+
+
+		if(!client.connect(connection))
+		{
+			std::cout << "Fail" << std::endl;
+		} else {
+			std::cout << "Connection Succeeded" << std::endl;
+		}
+
+		client.blockchain_fetch_history2(on_error2, on_done, childAddress(index));
+		client.wait();
+
+
+	}
+
 	//accesor
 	wallet::hd_private childPrivateKey(int index)
 	{
@@ -97,7 +135,7 @@ public:
 
 	wallet::payment_address childAddress(int index)
 	{
-		return wallet::ec_public(childPublicKey(index).point()).to_payment_address();
+		return wallet::ec_public(childPublicKey(index).point(), TESTNET).to_payment_address();
 	}
 
 private:
