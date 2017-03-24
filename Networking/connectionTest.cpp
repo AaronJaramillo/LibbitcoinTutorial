@@ -19,8 +19,8 @@ int main()
 
 
 
-	static const uint32_t timeout_ms = 3000;
-	static const uint32_t retries = 3;
+	// static const uint32_t timeout_ms = 3000;
+	// static const uint32_t retries = 3;
 
 	const auto on_reply = [](size_t blockHeight) 
 	{
@@ -44,12 +44,13 @@ int main()
 	if(!client.connect(connection))
 	{
 		std::cout << "Fail" << std::endl;
-	} else {
+	} else
 		std::cout << "Connection Succeeded" << std::endl;
 	}
 
 
 	static const auto on_done = [](const chain::history::list& rows){
+
 		std::cout<< encode_base10(rows[0].value, 8) <<std::endl;
 
 	};
