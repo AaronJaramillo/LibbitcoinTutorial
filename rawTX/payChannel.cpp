@@ -291,10 +291,20 @@ int main()
 	script().create_endorsement(payerSig, wallet.childPrivateKey(1).secret(), redeem, refund, 0, all);
 	script().create_endorsement(payeeSig, wallet.childPrivateKey(2).secret(), redeem, refund, 0, all);
 
-	data_chunk redeemScriptData = redeem.to_data(1);
+	data_chunk redeemScriptData = redeem.to_data(0);
 	operation::list ops2 {operation(opcode(0)), operation(payerSig), operation(payeeSig), operation(redeemScriptData)};
-	refund.inputs()[0].set_script(script(ops2));
 
+	if(script().is_sign_multisig_pattern(ops2))
+	{
+		std::cout<< "Sign Multisig pattern: " << std::endl;
+
+	}else{
+		std::cout << "Not sign Multisig pattern: " << std::endl;
+		
+	}
+
+	refund.inputs()[0].set_script(script(ops2));
+	refund.set_version(1);
 	std::cout << encode_base16(bond.to_data()) << "\n" <<std::endl;
 	std::cout << encode_base16(refund.to_data()) << std::endl;
 
@@ -334,7 +344,7 @@ int main()
 				script().create_endorsement(channel_payerSig, wallet.childPrivateKey(1).secret(), script(script().to_pay_script_hash_pattern(channelAddy.hash())), channel, 0, all);
 				script().create_endorsement(channel_payeeSig, wallet.childPrivateKey(2).secret(), script(script().to_pay_script_hash_pattern(channelAddy.hash())), channel, 0, all);
 
-				operation::list temp {operation(opcode(0)), operation(channel_payeeSig), operation(channel_payerSig), operation(redeemScriptData)};
+				operation::list temp {operation(opcode(0)), operation(channel_payerSig), operation(channel_payeeSig), operation(redeemScriptData)};
 				channel_ops = temp;
 				//channel.inputs()[0].set_script(script(channel_op));
 				refund = channel;
