@@ -12,7 +12,7 @@ using namespace bc::chain;
 output_point getUTXO()
 {
 	hash_digest previousTX;
-	decode_hash(previousTX, "");
+	decode_hash(previousTX, "aad2ef50d74bd70892c023e81e531f061b0addbe0e4b5c5dc4354bb2c709c038");
 	return output_point(previousTX, 0u);
 }
 ///Unused in this Utility
@@ -30,9 +30,9 @@ output_point getUTXO()
 // }
 
 //Previous Locking Script
-script redeemScript(data_chunk p1, data_chunk p2, data_chunk p3)
+script redeemScript(data_chunk p1, data_chunk p2)
 {
-	data_stack keys {p1, p2, p3};
+	data_stack keys {p1, p2};
 	script multisigScript = script(script().to_pay_multisig_pattern(2, keys));
 	return multisigScript;
 
@@ -63,7 +63,7 @@ script makelockingScript()
 }
 output makeOutput()
 {
-	uint64_t amount = 148292700;
+	uint64_t amount = 199998200;
 	script lockingScript = makelockingScript();
 	return output(amount, lockingScript);
 }
@@ -81,10 +81,10 @@ transaction makeTX()
 }
 
 //signing 
-endorsement signature(data_chunk p1, data_chunk p2, data_chunk p3, transaction tx, HD_Wallet wallet1)
+endorsement signature(data_chunk p1, data_chunk p2, transaction tx, HD_Wallet wallet1, int index)
 {
 	endorsement endorsed; 
-	if(script().create_endorsement(endorsed, wallet1.childPrivateKey(1).secret(), redeemScript(p1, p2, p3), tx, 0, all))
+	if(script().create_endorsement(endorsed, wallet1.childPrivateKey(index).secret(), redeemScript(p1, p2), tx, 0, all))
 	{
 		return endorsed;
 	} else {
@@ -93,9 +93,9 @@ endorsement signature(data_chunk p1, data_chunk p2, data_chunk p3, transaction t
 	}
 }
 
-script buildSigScript(endorsement endorsed1, endorsement endorsed2, data_chunk p1, data_chunk p2, data_chunk p3)
+script buildSigScript(endorsement endorsed1, endorsement endorsed2, data_chunk p1, data_chunk p2)
 {
-	script redeem = redeemScript(p1, p2, p3);
+	script redeem = redeemScript(p1, p2);
 
 	operation::list ops = {operation(opcode(0)), operation(endorsed1), operation(endorsed2), operation(redeem.to_data(0))};
 
@@ -113,28 +113,28 @@ script buildSigScript(endorsement endorsed1, endorsement endorsed2, data_chunk p
 
 int main()
 {
-	std::string Mnemonic1 = "";
-	std::string Mnemonic2 = "";
-	std::string Mnemonic3 = "";
+	std::string Mnemonic1 = "chase pair scorpion slab pause imitate dog blouse check dignity message strong";
+	//std::string Mnemonic2 = "";
+	//std::string Mnemonic3 = "";
 
 	HD_Wallet wallet1(split(Mnemonic1));
-	HD_Wallet wallet2(split(Mnemonic2));
-	HD_Wallet wallet3(split(Mnemonic3));
+	//HD_Wallet wallet2(split(Mnemonic2));
+	//HD_Wallet wallet3(split(Mnemonic3));
 
 	data_chunk p1 = to_chunk(wallet1.childPublicKey(1).point());
-	data_chunk p2 = to_chunk(wallet2.childPublicKey(1).point());
-	data_chunk p3 = to_chunk(wallet3.childPublicKey(1).point());
+	data_chunk p2 = to_chunk(wallet1.childPublicKey(2).point());
+	//data_chunk p3 = to_chunk(wallet3.childPublicKey(1).point());
 
 	transaction tx = makeTX();
 	tx.set_version(1);
 
 
-	std::cout << "\n Previous Locking: " << std::endl;
-	std::cout << previousLocking(p1, p2, p3).to_string(0xffffffff) << std::endl;
+	//std::cout << "\n Previous Locking: " << std::endl;
+	//std::cout << previousLocking(p1, p2).to_string(0xffffffff) << std::endl;
 
-	endorsement sig1 = signature(p1, p2, p3, tx, wallet1);
-	endorsement sig2 = signature(p1, p2, p3, tx, wallet2);
-	script sigScript = buildSigScript(sig1, sig2, p1, p2, p3);
+	endorsement sig1 = signature(p1, p2, tx, wallet1, 1);
+	endorsement sig2 = signature(p1, p2, tx, wallet1, 2);
+	script sigScript = buildSigScript(sig1, sig2, p1, p2);
 
 	std::cout << "\n" <<tx.outputs()[0].script().to_string(0xffffffff) << "||" << tx.outputs()[0].value() << std::endl;
 
