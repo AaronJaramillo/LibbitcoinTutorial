@@ -101,28 +101,36 @@ transaction payToContract(payment_address contract, uint64_t amount, ec_private 
 
 
 int main(){
-	payment_address aliceBTC_address("mpEwnuvRJxRC7R4KxjdooMFRUNRYaQxwWD");
-	payment_address bobBTC_address("moRFyt8S8YTCJkgHktoqVZ73zWb8crevh2");
+	payment_address aliceBTC_address("mkqF3X1i6wdMt8ZdjxbUeVmPdGxf4VP4dh");
+	payment_address bobBTC_address("mkUjzY3SeGaZscgT1L7zKZQci3kBw829NN");
 	script BTCcontract = contractScript(aliceBTC_address, bobBTC_address, setLocktime(14), makeHashLock("Libbitcoin"));
 	payment_address BTCcontract_address = payment_address(BTCcontract, 196);
-	ec_private alicBTC_private("cR3FqqoLz6b5wmA5h7LHzTJYosbcuZGsrQ2Fse8V2q2jQtesarmg", 239);
-	ec_private bobLTC_private("cSASaBNPZb2aRFUkK5VADEvTZJpTVFjpV4UvP7dnJETM9ycFX3f2", 239);
+	ec_private alicBTC_private("cVjB7vmbpFeuvyvYD5mdiADiX1ktsmFnUbo1b788EZ4noF4kicmj", 239);
+	ec_private bobLTC_private("cU9crnwsvodZEeWnU9gNq1FXiS1AQyLzYCV2eRTJ5NgQnf5oMmD8", 239);
 
 	std::cout << "BTC contract Address: " << BTCcontract_address.encoded() << std::endl;
 	std::cout << "HashLock: " << encode_base16(makeHashLock("Libbitcoin")) << "\n" <<std::endl;
+	std::cout << "Contract Script: " << encode_base16(BTCcontract.to_data(0)) << std::endl;
+
 	transaction BTCpayment = payToContract(BTCcontract_address, 100000000, alicBTC_private);
+	std::cout << "BTC Depoits: " << std::endl;
 	std::cout << encode_base16(BTCpayment.to_data(1)) << "\n" << std::endl;
 	short_hash hashLock;
 	decode_base16(hashLock, "7e88c8277e78610110c79a77eb0d340fba0c2775");
 	script LTCcontract = contractScript(bobBTC_address, aliceBTC_address, setLocktime(7), hashLock);
 	payment_address LTCcontract_address = payment_address(LTCcontract, 196);
 	std::cout << "LTC contract Address: " << LTCcontract_address.encoded() << "\n"<<std::endl;
+
+
 	transaction LTCpayment = payToContract(LTCcontract_address, 1000000000, bobLTC_private);
+	std::cout << "LTC Deposit: " << std::endl;
 	std::cout << encode_base16(LTCpayment.to_data(1)) << "\n" <<std::endl;
 
 	data_chunk hashKey;
+	std::cout << "withdraw LTC: " << std::endl;
 	std::cout << encode_base16(withdrawContract(LTCpayment, LTCcontract, 1000000000, to_chunk("Libbitcoin"), alicBTC_private).to_data(1)) << "\n" << std::endl;
 
+	std::cout << "withdraw BTC: " << std::endl;
 	std::cout << encode_base16(withdrawContract(BTCpayment, BTCcontract, 100000000, to_chunk("Libbitcoin"), bobLTC_private).to_data(1)) << std::endl;
 
 }
