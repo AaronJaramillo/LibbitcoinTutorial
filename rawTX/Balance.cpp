@@ -24,7 +24,7 @@ void getBalance(wallet::payment_address address)
 	client::connection_type connection = {};
 	connection.retries = 3;
 	connection.timeout_seconds = 8;
-	connection.server = config::endpoint("tcp://testnet.libbitcoin.net:19091");
+	connection.server = config::endpoint("tcp://testnet3.libbitcoin.net:19091");
 
 	client::obelisk_client client(connection);
 
@@ -49,7 +49,7 @@ void getBalance(wallet::payment_address address)
 		std::cout << "Connection Succeeded" << std::endl;
 	}
 
-	client.blockchain_fetch_history2(on_error2, on_done, address);
+	client.blockchain_fetch_history3(on_error2, on_done, address);
 	client.wait();
 
 
