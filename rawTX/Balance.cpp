@@ -5,7 +5,7 @@
 
 using namespace bc;
 
-uint64_t balancer(const chain::history::list& rows)
+uint64_t balancer(const auto& rows)
 {
 		uint64_t unspent_balance = 0;
 
@@ -29,7 +29,7 @@ void getBalance(wallet::payment_address address)
 	client::obelisk_client client(connection);
 
 
-	static const auto on_done = [](const chain::history::list& rows)
+	static const auto on_done = [](const auto& rows)
 	{
 		uint64_t balance = balancer(rows);
 		std::cout<< encode_base10(balance, 8) << std::endl;
