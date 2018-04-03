@@ -6,15 +6,12 @@ using namespace bc;
 
 int main()
 {
-	// std::string brainWallet = "AaronJaramilloOrg";
-	// std::string brainWalletHex = encode_base16(brainWallet);
-	// data_chunk privKey;
-	// data_chunk brainWalletRaw;
-	// decode_base16(brainWalletRaw, brainWalletHex);
-	// std::cout << encode_base16(brainWalletRaw) << std::endl;
-	// //brainWalletRaw = encode_base16(brainWallet);
-	// privKey = sha256_hash_chunk(brainWalletRaw);
-	std::string hexKey = "8010b1bb119ad37d4b65a1022a314897b1b3614b345974332cb1b9582cf03536";
+
+	data_chunk seed(16);
+	pseudo_random_fill(seed);
+	ec_secret secretKey = bitcoin_hash(seed);
+
+	std::string hexKey = encode_base16(secretKey);///"8010b1bb119ad37d4b65a1022a314897b1b3614b345974332cb1b9582cf03536";
 	std::cout << "Hex secret: " << std::endl;
 	std::cout << hexKey << std::endl;
 

@@ -45,13 +45,13 @@ int getInput()
 	return choice;
 }
 
-wallet::word_list getWordList()
+std::string getMnemonic()
 {
 	std::string mnemonicSeed;
 	std::cout << "Enter Seed String:";
 	cin.ignore();
 	std::getline(cin, mnemonicSeed);
-	return split(mnemonicSeed);
+	return mnemonicSeed;
 }
 
 int main(){

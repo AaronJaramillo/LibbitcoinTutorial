@@ -1,5 +1,4 @@
 #include <bitcoin/bitcoin.hpp>
-// #include "HD_walletTESTNET.cpp"
 #include <string.h>
 
 using namespace bc;
@@ -38,7 +37,7 @@ int main()
 	script P2SH_P2WPKH = script::to_pay_script_hash_pattern(WitnessProgramHash);
 
 	std::cout <<"P2SH Script: " <<P2SH_P2WPKH.to_string(0) << std::endl;
-	std::cout << "Payment Address: " <<payment_address(P2WPKH, payment_address::testnet_p2sh).encoded() << std::endl;
+	std::cout << "Payment Address: " << payment_address(P2WPKH, payment_address::testnet_p2sh).encoded() << std::endl;
 }
 
 

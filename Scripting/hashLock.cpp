@@ -105,8 +105,6 @@ int main()
 
 	std::cout << "\n" << encode_base16(resolveContract(hashLock, redeemScript).to_data(1)) << std::endl;
 
-	std::cout << "\n" << encode_base16(spendRefund(hashLock, redeemScript, wallet).to_data(1)) << std::endl;
-
 
 
 
