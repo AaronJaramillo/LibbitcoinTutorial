@@ -86,8 +86,6 @@ hd_private getPrivateKey(std::string walletMnemonic) {
 operation::list witnessProgram(ec_compressed publicKey) {
 	short_hash KeyHash = bitcoin_short_hash(publicKey);
 	return {operation(opcode(0)), operation(to_chunk(KeyHash))};
-
-
 }
 
 int main() {
@@ -97,8 +95,6 @@ int main() {
 
 
 	script P2WPKH = script(witnessProgram(compressedPublicKey));
-	std::cout << "Witness Program: " << P2WPKH.to_string(0) << std::endl;
-
 	short_hash WitnessProgramHash = bitcoin_short_hash(P2WPKH.to_data(0));
 	script P2SH_P2WPKH = script::to_pay_script_hash_pattern(WitnessProgramHash);
 	payment_address fromAddress = payment_address(P2WPKH, payment_address::testnet_p2sh);
