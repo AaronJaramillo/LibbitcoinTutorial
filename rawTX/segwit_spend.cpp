@@ -96,7 +96,6 @@ int main() {
 
 	script P2WPKH = script(witnessProgram(compressedPublicKey));
 	short_hash WitnessProgramHash = bitcoin_short_hash(P2WPKH.to_data(0));
-	script P2SH_P2WPKH = script::to_pay_script_hash_pattern(WitnessProgramHash);
 	payment_address fromAddress = payment_address(P2WPKH, payment_address::testnet_p2sh);
 
 	//Start Building Transanction
